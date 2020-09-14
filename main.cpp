@@ -98,7 +98,6 @@ Tetramino* instantiateTetramino(GameField &gameField, DrawingSystem &ds)
     int tileFigure = rand() % Tetramino::FIGURES_COUNT;
 
     Tetramino *instance = new Tetramino(gameField, tileFigure, *tileColor);
-
     for (int tileIndex = 0; tileIndex < Tetramino::TILES_COUNT; tileIndex++)
     {
         ds.drawable.push_front(&instance->getTile(tileIndex));

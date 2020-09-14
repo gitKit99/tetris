@@ -1,4 +1,5 @@
 #include "tile.h"
+#include <iostream>
 
 const sf::Color Tile::COLORS[COLORS_COUNT] = {
     sf::Color::Blue,
@@ -10,25 +11,40 @@ const sf::Color Tile::COLORS[COLORS_COUNT] = {
     sf::Color(255, 165, 0),  // orange
 };
 
-Tile::Tile(const std::string &filepath, GameField &gf, sf::Color col,
-           sf::Vector2f pos) : color(col), position(pos)
+Tile::Tile(const std::string &filepath, GameField &gf, sf::Color color,
+           sf::Vector2f position) : gameField(&gf)
 {
-    gameField = &gf;
     texture.loadFromFile(filepath);
+    this->setTexture(texture);
 
-    sprite.setTexture(texture);
-    sprite.setTextureRect(sf::IntRect(0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT));
-
-    sprite.setColor(color);
-    sprite.setPosition(position);
+    this->setTextureRect(sf::IntRect(0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT));
+    this->setColor(color);
+    this->setPosition(position);
 }
 
 const sf::Sprite & Tile::getSprite() const
 {
-    return sprite;
+    return *this;
 }
 
-bool Tile::moveH(int dx)
+bool Tile::moveOnField(int dx, int dy)
+{
+    sf::Vector2f pos(this->getPosition());
+    pos.x += dx * TEXTURE_WIDTH;
+    pos.y += dy * TEXTURE_HEIGHT;
+
+    if ((!gameField->isInField(getCellCoords(pos)))
+            || (!gameField->isCellEmpty(getCellCoords(pos))))
+    {
+        return false;
+    }
+    else {
+        this->setPosition(pos);
+        return true;
+    }
+}
+
+/*bool Tile::moveH(int dx)
 {
     position.x += dx * Tile::TEXTURE_WIDTH;
     if ((!gameField->isInField(getCellCoords(position)))
@@ -58,28 +74,27 @@ bool Tile::moveV(int dy)
         sprite.setPosition(position);
         return true;
     }
+}*/
+
+const sf::Vector2f &Tile::getPos() const
+{
+    return this->getPosition();
 }
 
-const sf::Vector2f &Tile::getPosition() const
+void Tile::setPos(const sf::Vector2f &position)
 {
-    return position;
-}
-
-void Tile::setPosition(const sf::Vector2f &pos)
-{
-    position = pos;
-    sprite.setPosition(position);
+    this->setPosition(position);
 }
 
 sf::Vector2f Tile::getCellCoords(const sf::Vector2f &pos)
 {
     //std::cout << "Global(" << pos.x << ", " << pos.y << ")\n";
-    return sf::Vector2f(pos.x / Tile::TEXTURE_WIDTH,
-                        pos.y / Tile::TEXTURE_HEIGHT);
+    return sf::Vector2f(pos.x / TEXTURE_WIDTH,
+                        pos.y / TEXTURE_HEIGHT);
 }
 
 // fill its own location on game field
 void Tile::pinOnField()
 {
-    gameField->fillCell(getCellCoords(position), *this);
+    this->gameField->fillCell(getCellCoords(this->getPosition()), *this);
 }

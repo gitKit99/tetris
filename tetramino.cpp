@@ -58,7 +58,7 @@ bool Tetramino::moveH(int dx)
     bool beyond = false;
     for (tileIndex = 0; tileIndex < Tetramino::TILES_COUNT; tileIndex++)
     {
-        beyond = !tiles[tileIndex]->moveH(dx);
+        beyond = !tiles[tileIndex]->moveOnField(dx, 0);
         if (beyond)
             break;
     }
@@ -66,7 +66,7 @@ bool Tetramino::moveH(int dx)
     if (beyond)
     {
         for (size_t offset = 0; offset < tileIndex; offset++)
-            tiles[offset]->moveH(-dx);
+            tiles[offset]->moveOnField(-dx, 0);
     }
 
     return !beyond;
@@ -80,14 +80,14 @@ bool Tetramino::moveV(int dy)
     bool beyond = false;
     for (tileIndex = 0; tileIndex < Tetramino::TILES_COUNT; tileIndex++)
     {
-        beyond = !tiles[tileIndex]->moveV(dy);
+        beyond = !tiles[tileIndex]->moveOnField(0, dy);
         if (beyond)
             break;
     }
     if (beyond)
     {
         for (size_t offset = 0; offset < tileIndex; offset++)
-            tiles[offset]->moveV(-dy);
+            tiles[offset]->moveOnField(0, -dy);
     }
 
     return !beyond;

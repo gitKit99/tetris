@@ -87,7 +87,7 @@ void GameField::checkRowsFilling(DrawingSystem &ds)
                  {
                      sf::Vector2f newTileCoords(clmn * Tile::TEXTURE_WIDTH,
                                                 sourceRow * Tile::TEXTURE_HEIGHT);
-                     field[sourceRow][clmn].tilePtr->setPosition(newTileCoords);
+                     field[sourceRow][clmn].tilePtr->setPos(newTileCoords);
                  }
              }
         }
@@ -95,45 +95,6 @@ void GameField::checkRowsFilling(DrawingSystem &ds)
         if (tilesCount < width)
             sourceRow--;
     }
-
-    /*for (int row = height - 1; row <= highestTileLevel; row--)
-    {
-        bool rowFull = true;
-        for (int clmn = 0; clmn < width; clmn++)
-        {
-            if (field[row][clmn].sign == FieldSign::EMPTY)
-            {
-                rowFull = false;
-                break;
-            }
-        }
-
-        if (rowFull)
-        {
-            for (int clmn = 0; clmn < width; clmn++)
-            {
-                FieldCell &clearedCell = field[row][clmn];
-                clearedCell.sign = FieldSign::EMPTY;
-                delete clearedCell.tilePtr;
-
-                if ((row != highestTileLevel)
-                        && (field[row - 1][clmn].sign == FieldSign::BUSY))
-                {
-                    FieldCell &shiftedCell = field[row - 1][clmn];
-                    bool moved = shiftedCell.tilePtr->moveV(1);
-
-                    if (!moved)
-                        std::cout << "Something went wrong" << std::endl;
-
-                    clearedCell.sign = shiftedCell.sign;
-                    clearedCell.tilePtr = shiftedCell.tilePtr;
-
-                    shiftedCell.sign = FieldSign::EMPTY;
-                    shiftedCell.tilePtr = nullptr;
-                }
-            }
-        }
-    }*/
 }
 
 const sf::RectangleShape &GameField::getBorderShape() const
