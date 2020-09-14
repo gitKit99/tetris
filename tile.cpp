@@ -1,6 +1,7 @@
 #include "tile.h"
 #include <iostream>
 
+// tiles possible colors
 const sf::Color Tile::COLORS[COLORS_COUNT] = {
     sf::Color::Blue,
     sf::Color(160, 32, 240),  // purple
@@ -14,6 +15,7 @@ const sf::Color Tile::COLORS[COLORS_COUNT] = {
 Tile::Tile(const std::string &filepath, GameField &gf, sf::Color color,
            sf::Vector2f position) : gameField(&gf)
 {
+    // init texture by loading from given file
     texture.loadFromFile(filepath);
     this->setTexture(texture);
 
@@ -27,54 +29,27 @@ const sf::Sprite & Tile::getSprite() const
     return *this;
 }
 
+// move tile sprite in game field
+// return true, if this action can be done
 bool Tile::moveOnField(int dx, int dy)
 {
-    sf::Vector2f pos(this->getPosition());
-    pos.x += dx * TEXTURE_WIDTH;
-    pos.y += dy * TEXTURE_HEIGHT;
+    sf::Vector2f newPos(this->getPosition()); // copy current position
 
-    if ((!gameField->isInField(getCellCoords(pos)))
-            || (!gameField->isCellEmpty(getCellCoords(pos))))
+    // shift new position on given values
+    // vertically (dy) or horizontally(dx)
+    // multiplaying on texture size (field cell size)
+    newPos.x += dx * TEXTURE_WIDTH;
+    newPos.y += dy * TEXTURE_HEIGHT;
+
+    // check if new position is on field and if its cell isn't already busy
+    if (gameField->isInField(getCellCoords(newPos))
+            && gameField->isCellEmpty(getCellCoords(newPos)))
     {
-        return false;
-    }
-    else {
-        this->setPosition(pos);
+        this->setPosition(newPos);
         return true;
     }
+    else return false;
 }
-
-/*bool Tile::moveH(int dx)
-{
-    position.x += dx * Tile::TEXTURE_WIDTH;
-    if ((!gameField->isInField(getCellCoords(position)))
-            || (!gameField->isCellEmpty(getCellCoords(position))))
-    {
-        position = sprite.getPosition();
-        return false;
-    }
-    else
-    {
-        sprite.setPosition(position);
-        return true;
-    }
-}
-
-bool Tile::moveV(int dy)
-{
-    position.y += dy * Tile::TEXTURE_HEIGHT;
-    if ((!gameField->isInField(getCellCoords(position)))
-            || (!gameField->isCellEmpty(getCellCoords(position))))
-    {
-        position = sprite.getPosition();
-        return  false;
-    }
-    else
-    {
-        sprite.setPosition(position);
-        return true;
-    }
-}*/
 
 const sf::Vector2f &Tile::getPos() const
 {
@@ -86,9 +61,9 @@ void Tile::setPos(const sf::Vector2f &position)
     this->setPosition(position);
 }
 
+// return relative cell coordinates on game field
 sf::Vector2f Tile::getCellCoords(const sf::Vector2f &pos)
 {
-    //std::cout << "Global(" << pos.x << ", " << pos.y << ")\n";
     return sf::Vector2f(pos.x / TEXTURE_WIDTH,
                         pos.y / TEXTURE_HEIGHT);
 }
