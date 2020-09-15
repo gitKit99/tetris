@@ -51,16 +51,6 @@ bool Tile::moveOnField(int dx, int dy)
     else return false;
 }
 
-const sf::Vector2f &Tile::getPos() const
-{
-    return this->getPosition();
-}
-
-void Tile::setPos(const sf::Vector2f &position)
-{
-    this->setPosition(position);
-}
-
 // return relative cell coordinates on game field
 sf::Vector2f Tile::getCellCoords(const sf::Vector2f &pos)
 {

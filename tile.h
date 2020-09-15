@@ -22,8 +22,6 @@ public:
     Tile(const std::string &filepath, GameField &gf,  sf::Color color = sf::Color::Blue,
          sf::Vector2f position = sf::Vector2f(0.f,0.f));
     const sf::Sprite& getSprite() const;
-    const sf::Vector2f& getPos() const;
-    void setPos(const sf::Vector2f &pos);
     bool moveOnField(int dx, int dy);
     void pinOnField();
     static sf::Vector2f getCellCoords(const sf::Vector2f &pos);

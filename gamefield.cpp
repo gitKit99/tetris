@@ -87,7 +87,7 @@ void GameField::checkRowsFilling(DrawingSystem &ds)
                  {
                      sf::Vector2f newTileCoords(clmn * Tile::TEXTURE_WIDTH,
                                                 sourceRow * Tile::TEXTURE_HEIGHT);
-                     field[sourceRow][clmn].tilePtr->setPos(newTileCoords);
+                     field[sourceRow][clmn].tilePtr->setPosition(newTileCoords);
                  }
              }
         }
